@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp -R /Users/celiovieira/IdeaProjects/auth /Users/celiovieira/IdeaProjects/auth-trabalho)",
+      "Bash(rm -rf /Users/celiovieira/IdeaProjects/auth-trabalho/.idea /Users/celiovieira/IdeaProjects/auth-trabalho/build /Users/celiovieira/IdeaProjects/auth-trabalho/.gradle)",
+      "Read(//Users/celiovieira/IdeaProjects/**)"
+    ]
+  }
+}
