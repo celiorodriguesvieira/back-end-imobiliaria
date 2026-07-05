@@ -4,9 +4,9 @@ Trabalho da disciplina de Back-end (PUC-PR).
 
 API de uma imobiliária feita em Kotlin com Spring Boot. O modelo é simples: um corretor pode ter vários imóveis (one-to-many).
 
-## Aviso
+## Vídeo de apresentação
 
-No momento estou sem microfone, por isso não foi possível gravar o vídeo de apresentação. A documentação abaixo cobre como rodar e testar todos os endpoints.
+Explicação do código e demonstração: https://www.youtube.com/watch?v=-ZimDwBQHwo
 
 ## Tecnologias
 
