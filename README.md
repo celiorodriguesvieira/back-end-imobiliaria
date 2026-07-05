@@ -38,8 +38,12 @@ Pras requisições autenticadas (PUT e DELETE), o login da API é `admin` / `adm
 POST   /corretores
 GET    /corretores
 GET    /corretores/{id}
-DELETE /corretores/{id}        (autenticado)
+DELETE /corretores/{id}                (autenticado)
+DELETE /corretores/{id}/avatar         (autenticado, refaz o avatar)
 ```
+
+Ao criar um corretor, o servidor tenta definir um avatar automaticamente (ver
+seção **Avatares** abaixo).
 
 ### Imóvel
 
@@ -70,6 +74,39 @@ Exemplo:
 GET /imoveis?tipo=APARTAMENTO&bairro=Batel&precoMin=300000&sortBy=preco&sortDir=DESC
 ```
 
+## Avatares
+
+Nenhum corretor fica sem avatar. Ao criar um corretor (`POST /corretores`), o
+servidor faz um esforço pra definir um, nesta ordem:
+
+1. Procura um **Gravatar** global pelo hash SHA-256 do e-mail
+   (`gravatar.com/avatar/{hash}?d=404`). O `d=404` faz o Gravatar responder 404
+   quando o e-mail não tem avatar.
+2. Se não houver Gravatar, gera as iniciais do nome via
+   [ui-avatars.com](https://ui-avatars.com/) em **PNG**.
+3. A imagem escolhida é **baixada e enviada para o S3** — o campo `avatar` do
+   corretor guarda a URL do objeto no bucket, não o link das APIs externas.
+
+O endpoint opcional `DELETE /corretores/{id}/avatar` (autenticado) refaz todo
+esse processo: apaga o avatar atual do S3 e gera um novo.
+
+### Configuração do S3
+
+As credenciais são lidas de variáveis de ambiente (ver `application.yaml`):
+
+```
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=nome-do-bucket
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+# opcional, pra apontar pra um S3 local (LocalStack/MinIO):
+AWS_S3_ENDPOINT=
+```
+
+Enquanto o bucket/credenciais não estiverem configurados, o corretor é criado
+normalmente **sem avatar** (`avatar: null`) — o upload é ignorado com um aviso
+no log, sem quebrar o cadastro.
+
 ## Validações
 
 Os services validam as entradas e lançam `BadRequestException` ou `NotFoundException`. Quem trata é o `GlobalExceptionHandler`, que devolve um JSON padrão:
@@ -95,6 +132,8 @@ O que está coberto:
 src/main/kotlin/br/pucpr/auth/
   corretores/      Corretor + Repository + Service + Controller
   imoveis/         Imovel, TipoImovel, Repository, Service, Controller
+  avatar/          AvatarService (Gravatar → ui-avatars → S3)
+  storage/         S3Config + S3Storage (upload/delete no bucket)
   exception/       Exceptions e GlobalExceptionHandler
   security/        SecurityConfig (Basic Auth com BCrypt)
   AuthApplication.kt

@@ -38,3 +38,23 @@ out/
 
 ### Kotlin ###
 .kotlin
+
+### Credenciais / segredos (NUNCA versionar) ###
+# Variáveis de ambiente (chaves AWS, etc.)
+.env
+.env.*
+!.env.example
+# Arquivos de credencial baixados do console AWS
+*.csv
+credentials
+credentials.*
+*credentials*.json
+# Perfis locais do Spring que podem conter segredos
+application-local.yaml
+application-local.yml
+application-local.properties
+application-secret.*
+# Chaves e certificados
+*.pem
+*.key
+.aws/

@@ -29,4 +29,7 @@ class CorretorController(val service: CorretorService) {
         service.delete(id)
         return ResponseEntity.noContent().build()
     }
+
+    @DeleteMapping("/{id}/avatar")
+    fun refreshAvatar(@PathVariable id: Long) = service.refreshAvatar(id)
 }

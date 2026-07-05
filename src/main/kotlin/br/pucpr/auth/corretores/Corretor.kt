@@ -17,6 +17,7 @@ class Corretor(
     var nome: String = "",
     var email: String = "",
     var telefone: String? = null,
+    var avatar: String? = null,
 
     @JsonIgnore
     @OneToMany(mappedBy = "corretor")
